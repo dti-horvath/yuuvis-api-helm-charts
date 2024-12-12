@@ -8,7 +8,7 @@ name: infrastructure
 version: 0.16.0
 dependencies:
 - name: minio
-  version: ^5.0.14
+  version: ^5.3.0
   repository: https://charts.min.io/
   condition: minio.enabled
 - name: keycloakx
@@ -17,15 +17,15 @@ dependencies:
   condition: keycloak.enabled
   alias: keycloak
 - name: redis
-  version: ^18.4.0
+  version: ^20.4.0
   repository: https://charts.bitnami.com/bitnami
   condition: redis.enabled
 - name: postgresql
-  version: ^13.2.21
+  version: ^15.5.38
   repository: https://charts.bitnami.com/bitnami
   condition: postgresql.enabled
 - name: rabbitmq
-  version: ^12.5.4
+  version: ^15.1.0
   repository: https://charts.bitnami.com/bitnami 
   condition: rabbitmq.enabled
 - name: gitea

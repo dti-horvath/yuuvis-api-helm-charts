@@ -157,12 +157,11 @@ rabbitmq:
   auth:
     username: rodger
     password: changeme
-  extraPlugins: "rabbitmq_auth_backend_ldap rabbitmq_amqp1_0 rabbitmq_prometheus"
+  extraPlugins: "rabbitmq_auth_backend_ldap rabbitmq_prometheus"
   extraConfiguration: |-
     #default_vhost = {{ .Release.Namespace }}-vhost
     #disk_free_limit.absolute = 50MB
     #load_definitions = /app/load_definition.json
-    amqp1_0.default_user = rodger
   persistence:
     enabled: true
     storageClass: standard
