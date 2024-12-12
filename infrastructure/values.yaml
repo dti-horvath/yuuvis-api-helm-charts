@@ -219,6 +219,12 @@ minio:
     
 keycloak:
   enabled: true
+  # if true, a selfsigned certificate is created, keycloak is configured to use the
+  # the selfsigned cert and an extra k8s service keycloak-https is deployed
+  # further a job is used to create the namespace with the name from yuuvis.namespaces.yuuvis and create a secret with the cert
+  # if a selfsigned cert is used the yuuvis services authentication, system and tenant-management
+  # deployments must be configured to mount the secret
+  createselfsignedcert: true
   fullnameOverride: "keycloak"
   image:
     repository: docker.yuuvis.org/yuuvis/keycloak
@@ -244,13 +250,17 @@ keycloak:
         user: keycloak
         password: changeme
   extraVolumes: |
+    {{- if .Values.createselfsignedcert }}
     - name: tls-secret
       secret:
         secretName: keycloak-selfsigned-tls-secret
+    {{- end }}
   extraVolumeMounts: |
+    {{- if .Values.createselfsignedcert }}
     - name: tls-secret
       mountPath: "/opt/keycloak/conf/tls"
       readOnly: true
+      {{- end }}
   command:
     - /opt/keycloak/bin/kc.sh
     - --verbose
@@ -273,10 +283,12 @@ keycloak:
           key: password
     - name: KC_CACHE
       value: local
+    {{- if .Values.createselfsignedcert }}
     - name: KC_HTTPS_CERTIFICATE_FILE
       value: /opt/keycloak/conf/tls/tls.crt
     - name: KC_HTTPS_CERTIFICATE_KEY_FILE
       value: /opt/keycloak/conf/tls/tls.key
+    {{- end }}
   cache:
     stack: custom
   resources:
