@@ -1,3 +1,4 @@
+{{- if .Values.yuuvis.client.userservice.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,6 +16,7 @@ spec:
       labels:
         name: userservice
     spec:
+      automountServiceAccountToken: false
       {{- if or .Values.yuuvis.client.userservice.nodeAffinity .Values.yuuvis.client.userservice.podAffinity .Values.yuuvis.client.userservice.podAntiAffinity }}
       affinity:
         {{- with .Values.yuuvis.client.userservice.nodeAffinity }}
@@ -57,6 +59,15 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
       imagePullSecrets:
       - name: {{.Values.yuuvis.image.imagePullSecret }}
       initContainers:
@@ -96,7 +107,7 @@ spec:
           subPath: initdb.sh
       {{- end}}
       - name: init-config
-        image: "{{.Values.initContainer.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
+        image: "{{.Values.yuuvis.image.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
         command: ["sh", "-c", "{{.Values.initContainer.command}}"]
         imagePullPolicy: IfNotPresent
       restartPolicy: Always
@@ -110,8 +121,18 @@ spec:
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
+      - emptyDir: {}
+        name: tmp
       {{- if .Values.yuuvis.client.userservice.database.createdb }}
       - configMap:
           name: inituserservicedbconfigmap
         name: initdbscript
       {{- end}}
+      securityContext:
+        fsGroup: {{.Values.yuuvis.securityContext.fsGroup}}
+        runAsGroup: {{.Values.yuuvis.securityContext.runAsGroup}}
+        runAsUser: {{.Values.yuuvis.securityContext.runAsUser}}
+        runAsNonRoot: {{.Values.yuuvis.securityContext.runAsNonRoot}}
+        seccompProfile:
+          type: RuntimeDefault
+{{- end }}      

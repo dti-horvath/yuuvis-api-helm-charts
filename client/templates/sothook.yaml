@@ -1,3 +1,4 @@
+{{- if .Values.yuuvis.client.sothook.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,6 +17,7 @@ spec:
         app: yuuvis
         name: sothook
     spec:
+      automountServiceAccountToken: false
       {{- if or .Values.yuuvis.client.sothook.nodeAffinity .Values.yuuvis.client.sothook.podAffinity .Values.yuuvis.client.sothook.podAntiAffinity }}
       affinity:
         {{- with .Values.yuuvis.client.sothook.nodeAffinity }}
@@ -30,7 +32,7 @@ spec:
       {{- end }}
       initContainers:
       - name: init-sothook
-        image: "{{.Values.initContainer.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
+        image: "{{.Values.yuuvis.image.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
         command: ["sh", "-c", "{{.Values.initContainer.command}}"]
         imagePullPolicy: IfNotPresent
       containers:
@@ -64,6 +66,15 @@ spec:
         {{- end}}
         ports:
         - containerPort: 10779
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
       restartPolicy: Always
       imagePullSecrets:
       - name: {{.Values.yuuvis.image.imagePullSecret }}
@@ -76,3 +87,14 @@ spec:
       {{- with .Values.yuuvis.client.sothook.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
+      securityContext:
+        fsGroup: {{.Values.yuuvis.securityContext.fsGroup}}
+        runAsGroup: {{.Values.yuuvis.securityContext.runAsGroup}}
+        runAsUser: {{.Values.yuuvis.securityContext.runAsUser}}
+        runAsNonRoot: {{.Values.yuuvis.securityContext.runAsNonRoot}}
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - emptyDir: {}
+        name: tmp
+{{- end }}      

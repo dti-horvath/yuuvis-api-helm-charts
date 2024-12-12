@@ -2,9 +2,9 @@ yuuvis:
   image:
     imagePullPolicy: Always
     imagePullSecret: yuuvisorg
-    dockerRegistry: docker.yuuvis.org/yuuvis
+    dockerRegistry: docker.yuuvis.org
   configservice:
-    url: http://configservice/config
+    url: http://system/config
   livenessProbe:
     enable: false
     initialDelaySeconds: 300
@@ -15,15 +15,20 @@ yuuvis:
     initialDelaySeconds: 0
     periodSeconds: 30
     timeoutSeconds: 5
+  securityContext:
+    fsGroup: 1000
+    runAsGroup: 1000
+    runAsUser: 1000
+    runAsNonRoot: true
   bpm:
     engine:
-      dockerImage: bpm-engine:0.13.3
-      initContainerImage: helper/init-helper:2023-12-03
+      dockerImage: yuuvis/bpm-engine:0.16.0
+      initContainerImage: yuuvis/helper/init-helper:2023-12-03
       profiles: dbspostgres,swagger,oauth2
       instances: 1
       pdb:
         # pdb requires instances > 1 and minAvailable < instances,
-        # otherwise draining nodes will deadlock!
+        # otherwise draining nodes will deadlock! 
         enabled: false
 
         # set `minAvailable: null` if you want to use maxUnavailable instead
@@ -60,24 +65,6 @@ yuuvis:
         privilege:
           user: postgres
           password: changeme
-    admin:
-      dockerImage: bpm-admin:0.9.1
-      profiles: 
-      instances: 1
-      java:
-        maxHeap: -Xmx128m
-      serverConfigProcessServerAddress: http://bpm-engine
-      serverConfigCmmnServerAddress: http://bpm-engine
-      serverConfigDmnServerAddress: http://bpm-engine
-      serverConfigFormServerAddress: http://bpm-engine
-      serverConfigContentServerAddress: http://bpm-engine
-      serverConfigAppServerAddress: http://bpm-engine
-      nodeSelector: {}
-      priorityClassName: ""
-      tolerations: []
-      nodeAffinity: {}
-      podAffinity: {}
-      podAntiAffinity: {}
        
 initContainer:
-  command: "until wget -q --spider http://configservice/manage/health; do echo waiting for configservice; sleep 11; done;"
+  command: "until wget -q --spider http://system/manage/health; do echo waiting for configservice; sleep 11; done;"

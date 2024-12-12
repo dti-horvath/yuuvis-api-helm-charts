@@ -52,7 +52,7 @@ yuuvis:
 
 
 elasticsearch:
-  image: docker.yuuvis.org/yuuvis/elasticsearch:2023-08-07
+  image: docker.yuuvis.org/yuuvis/elasticsearch:2024-12-09
   imagePullPolicy: IfNotPresent
   imagePullSecret: dockeryuuvisorg
   storage: 100Gi
@@ -223,13 +223,15 @@ keycloak:
   fullnameOverride: "keycloak"
   image:
     repository: docker.yuuvis.org/yuuvis/keycloak
-    tag: "24.0.2-stable1"
+    tag: "26.0.5-stable1"
     pullPolicy: IfNotPresent
   imagePullSecrets: 
    - name: dockeryuuvisorg
   http:
     # For backwards compatibility reasons we set this to the value used by previous Keycloak versions.
     relativePath: "/auth"
+    internalPort: http-internal
+    internalScheme: HTTP
   database:
     vendor: postgres
     hostname: postgresql 
@@ -255,7 +257,8 @@ keycloak:
     - --verbose
     - start
     - --hostname-strict=false
-    - --hostname-strict-https=false
+    - --http-enabled=true
+    - --proxy-headers=xforwarded
     - --spi-events-listener-jboss-logging-success-level=info
     - --spi-events-listener-jboss-logging-error-level=warn
   extraEnv: |

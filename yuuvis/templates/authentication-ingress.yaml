@@ -1,0 +1,31 @@
+{{- if .Values.yuuvis.services.authentication.ingress.enable }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: authentication
+  labels:
+    app: {{.Values.yuuvis.labels.app}}
+  annotations:
+    {{- if .Values.yuuvis.services.authentication.ingress.certmanager }}
+{{ tpl .Values.yuuvis.services.authentication.ingress.certmanager . | indent 4 }}    
+    {{- end }}
+{{ tpl .Values.yuuvis.services.authentication.ingress.annotations . | indent 4 }}
+    
+spec:
+  ingressClassName: {{ .Values.yuuvis.services.authentication.ingress.classname }}
+  tls:
+    - secretName: {{ .Values.yuuvis.services.authentication.ingress.secretname }}
+      hosts:
+        - {{ .Values.yuuvis.services.authentication.ingress.host }}
+  rules:
+    - host: {{ .Values.yuuvis.services.authentication.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: "Prefix"
+            backend:
+              service:
+                name: authentication
+                port:
+                  number: 80
+{{- end -}}

@@ -1,3 +1,4 @@
+{{- if .Values.yuuvis.client.apiweb.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,6 +18,7 @@ spec:
         name: api-web
         yuuvislog: "true"
     spec:
+      automountServiceAccountToken: false
       {{- if or .Values.yuuvis.client.apiweb.nodeAffinity .Values.yuuvis.client.apiweb.podAffinity .Values.yuuvis.client.apiweb.podAntiAffinity }}
       affinity:
         {{- with .Values.yuuvis.client.apiweb.nodeAffinity }}
@@ -31,7 +33,7 @@ spec:
       {{- end }}
       initContainers:
       - name: init-api-web
-        image: "{{.Values.initContainer.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
+        image: "{{.Values.yuuvis.image.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
         command: ["sh", "-c", "{{.Values.initContainer.command}}"]
         imagePullPolicy: IfNotPresent
       containers:
@@ -62,6 +64,15 @@ spec:
           periodSeconds: {{.Values.yuuvis.readinessProbe.periodSeconds }}
           timeoutSeconds: {{.Values.yuuvis.readinessProbe.timeoutSeconds }}
         {{- end}}
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
         name: api-web
         ports:
         - containerPort: 7550
@@ -78,3 +89,14 @@ spec:
       {{- with .Values.yuuvis.client.apiweb.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
+      securityContext:
+        fsGroup: {{.Values.yuuvis.securityContext.fsGroup}}
+        runAsGroup: {{.Values.yuuvis.securityContext.runAsGroup}}
+        runAsUser: {{.Values.yuuvis.securityContext.runAsUser}}
+        runAsNonRoot: {{.Values.yuuvis.securityContext.runAsNonRoot}}
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - emptyDir: {}
+        name: tmp
+{{- end }}

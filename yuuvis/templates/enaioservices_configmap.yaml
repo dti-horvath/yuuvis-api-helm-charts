@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: yuuvis-common-env
 data:
-  CONFIGSERVICEURL: http://configservice/config
+  CONFIGSERVICEURL: http://system/config

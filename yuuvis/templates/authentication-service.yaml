@@ -50,3 +50,20 @@ spec:
   selector:
     name: authentication
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{.Values.yuuvis.labels.app}}
+    name: authentication-headless
+  name: authentication-headless
+spec:
+  clusterIP: None
+  ports:
+  - name: "80"
+    port: 80
+    targetPort: {{.Values.yuuvis.services.authentication.internalPort}}
+  selector:
+    name: authentication
+  type: ClusterIP

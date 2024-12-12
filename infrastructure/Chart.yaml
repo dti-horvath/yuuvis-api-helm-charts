@@ -3,16 +3,16 @@ appVersion: "1.0"
 description: umbrella chart with examples for infrastructure components of an yuuvis API installation
              infrastructure components include a database, an identity provider, storage etc.
              this chart is for demo use only 
-             do not use this chart for production
+             do not use this chart for production 
 name: infrastructure
-version: 0.13.6
+version: 0.16.0
 dependencies:
 - name: minio
   version: ^5.0.14
   repository: https://charts.min.io/
   condition: minio.enabled
 - name: keycloakx
-  version: ^1.6.1
+  version: ^2.5.1
   repository: https://codecentric.github.io/helm-charts/
   condition: keycloak.enabled
   alias: keycloak

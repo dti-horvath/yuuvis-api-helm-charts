@@ -15,6 +15,7 @@ spec:
       labels:
         name: renditionrepository
     spec:
+      automountServiceAccountToken: false
       {{- if or .Values.yuuvis.renditionrepository.nodeAffinity .Values.yuuvis.renditionrepository.podAffinity .Values.yuuvis.renditionrepository.podAntiAffinity }}
       affinity:
         {{- with .Values.yuuvis.renditionrepository.nodeAffinity }}
@@ -45,6 +46,15 @@ spec:
           initialDelaySeconds: {{.Values.yuuvis.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{.Values.yuuvis.readinessProbe.periodSeconds }}
           timeoutSeconds: {{.Values.yuuvis.readinessProbe.timeoutSeconds }}
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
         env:
         - name: JAVA_OPTS
           value: {{.Values.yuuvis.renditionrepository.java.options}}
@@ -60,7 +70,7 @@ spec:
       - name: {{.Values.yuuvis.image.imagePullSecret}}
       initContainers:
       - name: init-renditionrepository
-        image: "{{.Values.initContainer.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
+        image: "{{.Values.yuuvis.image.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
         imagePullPolicy: IfNotPresent
         command: ["sh", "-c", "{{.Values.initContainer.command}}"]
       {{- with .Values.yuuvis.renditionrepository.nodeSelector }}
@@ -72,3 +82,13 @@ spec:
       {{- with .Values.yuuvis.renditionrepository.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
+      securityContext:
+        fsGroup: {{.Values.yuuvis.securityContext.fsGroup}}
+        runAsGroup: {{.Values.yuuvis.securityContext.runAsGroup}}
+        runAsUser: {{.Values.yuuvis.securityContext.runAsUser}}
+        runAsNonRoot: {{.Values.yuuvis.securityContext.runAsNonRoot}}
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - emptyDir: {}
+        name: tmp

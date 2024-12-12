@@ -1,4 +1,4 @@
-{{- if .Values.yuuvis.client.sothook.pdb.enabled -}}
+{{- if and .Values.yuuvis.client.sothook.enabled .Values.yuuvis.client.sothook.pdb.enabled -}}
 kind: PodDisruptionBudget
 apiVersion: policy/v1
 metadata:

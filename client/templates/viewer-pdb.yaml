@@ -1,4 +1,4 @@
-{{- if .Values.yuuvis.client.viewer.pdb.enabled -}}
+{{- if and .Values.yuuvis.client.viewer.enabled .Values.yuuvis.client.viewer.pdb.enabled -}}
 kind: PodDisruptionBudget
 apiVersion: policy/v1
 metadata:

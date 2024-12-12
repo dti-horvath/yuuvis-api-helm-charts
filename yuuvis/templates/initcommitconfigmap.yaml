@@ -41,8 +41,8 @@ data:
     cp /yuuvis/data/system/*.json .
     cd ..
     
-    git config --local user.email yuuvis-init@yuuvis.org
-    git config --local user.name yuuvis-init
+    git config --local user.email {{.Values.yuuvis.git.email}}
+    git config --local user.name {{.Values.yuuvis.git.user}}
     git add .
     git commit -m "init config"
     

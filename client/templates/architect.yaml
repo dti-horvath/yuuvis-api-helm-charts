@@ -1,3 +1,4 @@
+{{- if .Values.yuuvis.client.architect.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -34,6 +35,15 @@ spec:
         ports:
         - containerPort: 80
           protocol: TCP
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
       imagePullSecrets:
       - name: {{.Values.yuuvis.image.imagePullSecret }}
       restartPolicy: Always
@@ -46,3 +56,14 @@ spec:
       {{- with .Values.yuuvis.client.architect.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
+      securityContext:
+        fsGroup: {{.Values.yuuvis.securityContext.fsGroup}}
+        runAsGroup: {{.Values.yuuvis.securityContext.runAsGroup}}
+        runAsUser: {{.Values.yuuvis.securityContext.runAsUser}}
+        runAsNonRoot: {{.Values.yuuvis.securityContext.runAsNonRoot}}
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - emptyDir: {}
+        name: tmp
+{{- end }}      

@@ -1,4 +1,4 @@
-{{- if .Values.yuuvis.client.office365.pdb.enabled -}}
+{{- if and .Values.yuuvis.client.office365.enabled .Values.yuuvis.client.office365.pdb.enabled -}}
 kind: PodDisruptionBudget
 apiVersion: policy/v1
 metadata:

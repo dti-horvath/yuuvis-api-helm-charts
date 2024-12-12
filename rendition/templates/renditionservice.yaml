@@ -15,6 +15,7 @@ spec:
       labels:
         name: rendition
     spec:
+      automountServiceAccountToken: false
       {{- if or .Values.yuuvis.renditionservice.nodeAffinity .Values.yuuvis.renditionservice.podAffinity .Values.yuuvis.renditionservice.podAntiAffinity }}
       affinity:
         {{- with .Values.yuuvis.renditionservice.nodeAffinity }}
@@ -41,11 +42,20 @@ spec:
         ports:
         - containerPort: 7341
           protocol: TCP
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
       imagePullSecrets:
       - name: {{.Values.yuuvis.image.imagePullSecret}}
       initContainers:
       - name: init-rendition
-        image: "{{.Values.initContainer.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
+        image: "{{.Values.yuuvis.image.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
         imagePullPolicy: IfNotPresent
         command: ["sh", "-c", "{{.Values.initContainer.command}}"]
       {{- with .Values.yuuvis.renditionservice.nodeSelector }}
@@ -57,3 +67,13 @@ spec:
       {{- with .Values.yuuvis.renditionservice.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
+      securityContext:
+        fsGroup: {{.Values.yuuvis.securityContext.fsGroup}}
+        runAsGroup: {{.Values.yuuvis.securityContext.runAsGroup}}
+        runAsUser: {{.Values.yuuvis.securityContext.runAsUser}}
+        runAsNonRoot: {{.Values.yuuvis.securityContext.runAsNonRoot}}
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - emptyDir: {}
+        name: tmp

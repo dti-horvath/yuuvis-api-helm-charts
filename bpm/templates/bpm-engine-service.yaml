@@ -15,6 +15,7 @@ spec:
       labels:
         name: bpm-engine
     spec:
+      automountServiceAccountToken: false
       {{- if or .Values.yuuvis.bpm.engine.nodeAffinity .Values.yuuvis.bpm.engine.podAffinity .Values.yuuvis.bpm.engine.podAntiAffinity }}
       affinity:
         {{- with .Values.yuuvis.bpm.engine.nodeAffinity }}
@@ -61,6 +62,15 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
       imagePullSecrets:
       - name: {{.Values.yuuvis.image.imagePullSecret}}
       initContainers:
@@ -107,7 +117,16 @@ spec:
       {{- with .Values.yuuvis.bpm.engine.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
+      securityContext:
+        fsGroup: {{.Values.yuuvis.securityContext.fsGroup}}
+        runAsGroup: {{.Values.yuuvis.securityContext.runAsGroup}}
+        runAsUser: {{.Values.yuuvis.securityContext.runAsUser}}
+        runAsNonRoot: {{.Values.yuuvis.securityContext.runAsNonRoot}}
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
+      - emptyDir: {}
+        name: tmp
       - configMap:
           name: initbpmdbconfigmap
         name: initscript

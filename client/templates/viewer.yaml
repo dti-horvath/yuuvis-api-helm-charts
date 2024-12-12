@@ -1,3 +1,4 @@
+{{- if .Values.yuuvis.client.viewer.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,6 +16,7 @@ spec:
       labels:
         name: viewer
     spec:
+      automountServiceAccountToken: false
       {{- if or .Values.yuuvis.client.viewer.nodeAffinity .Values.yuuvis.client.viewer.podAffinity .Values.yuuvis.client.viewer.podAntiAffinity }}
       affinity:
         {{- with .Values.yuuvis.client.viewer.nodeAffinity }}
@@ -48,6 +50,15 @@ spec:
           periodSeconds: {{.Values.yuuvis.readinessProbe.periodSeconds }}
           timeoutSeconds: {{.Values.yuuvis.readinessProbe.timeoutSeconds }}
         {{- end}}
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
         name: viewer
         ports:
         - containerPort: 9000
@@ -64,3 +75,14 @@ spec:
       {{- with .Values.yuuvis.client.viewer.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
+      securityContext:
+        fsGroup: {{.Values.yuuvis.securityContext.fsGroup}}
+        runAsGroup: {{.Values.yuuvis.securityContext.runAsGroup}}
+        runAsUser: {{.Values.yuuvis.securityContext.runAsUser}}
+        runAsNonRoot: {{.Values.yuuvis.securityContext.runAsNonRoot}}
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - emptyDir: {}
+        name: tmp
+{{- end }}
