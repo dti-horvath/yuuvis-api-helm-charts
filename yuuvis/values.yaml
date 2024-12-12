@@ -32,7 +32,7 @@ yuuvis:
   initjob:
     docker:
       image: yuuvis/helper/init-realm
-      tag: 19_v2
+      tag: 24_v3
     # if enabled the config-init job will create a realm in keycloak with the 
     # name from yuuvis.initjob.keycloak.realm.name 
     # and an user with all yuuvis roles 
@@ -41,6 +41,8 @@ yuuvis:
       url: "http://keycloak-http.infrastructure/auth"
       admin: "keycloak"
       password: "changeme"
+      # scheme used for keycloak urls in the realm entry created in the application-oauth2
+      publicscheme: https
       realm:
         name: "myfirsttenant"
         user: "root"

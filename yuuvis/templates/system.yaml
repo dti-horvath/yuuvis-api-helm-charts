@@ -58,6 +58,8 @@ spec:
           value: {{.Values.yuuvis.initjob.authurl}}
         - name: CREATEREALM
           value: "{{.Values.yuuvis.initjob.createrealm}}"
+        - name: KEYCLOAKPUBLICSCHEME
+          value: "{{.Values.yuuvis.initjob.keycloak.publicscheme}}"
         - name: GITSERVER
           value: {{.Values.yuuvis.git.server}}
         - name: GITURL
