@@ -86,7 +86,56 @@ spec:
       imagePullSecrets:
       - name: {{.Values.yuuvis.image.imagePullSecret}}
       initContainers:
-
+      {{- if .Values.yuuvis.renditiontextworker.yuuvis.user.createuser.enabled }}
+      - name: init-create-user 
+        env:
+        - name: KEYCLOAKURL
+          value:  {{ .Values.yuuvis.renditiontextworker.yuuvis.user.createuser.keycloak.url }}
+        - name: KEYCLOAKADMIN
+          valueFrom:
+            secretKeyRef:
+              key: keycloadadmin 
+              name: {{.Values.yuuvis.renditiontextworker.yuuvis.user.secretname}}
+        - name: KEYCLOAKPASSOWRD
+          valueFrom:
+            secretKeyRef:
+              key: keycloakadminpassword 
+              name: {{.Values.yuuvis.renditiontextworker.yuuvis.user.secretname}}
+        - name: KEYCLOAKINITREALMNAME
+          valueFrom:
+            secretKeyRef:
+              key: tenant 
+              name: {{.Values.yuuvis.renditiontextworker.yuuvis.user.secretname}}
+        - name: KEYCLOAKINITREALMUSER
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: {{.Values.yuuvis.renditiontextworker.yuuvis.user.secretname}}
+        - name: KEYCLOAKINITREALMPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: {{.Values.yuuvis.renditiontextworker.yuuvis.user.secretname}}
+        - name: KEYCLOAKINITREALMUSEREMAIL
+          valueFrom:
+            secretKeyRef:
+              key: email
+              name: {{.Values.yuuvis.renditiontextworker.yuuvis.user.secretname}}
+        image: {{.Values.yuuvis.image.dockerRegistry}}/{{.Values.yuuvis.renditiontextworker.yuuvis.user.createuser.image}}
+        imagePullPolicy: IfNotPresent
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+      {{- end }}
       - name: init-renditiontextworker
         image: "{{.Values.yuuvis.image.dockerRegistry}}/{{.Values.initContainer.image}}:{{.Values.initContainer.tag}}"
         imagePullPolicy: IfNotPresent
