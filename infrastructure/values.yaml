@@ -224,6 +224,7 @@ keycloak:
   # further a job is used to create the namespace with the name from yuuvis.namespaces.yuuvis and create a secret with the cert
   # if a selfsigned cert is used the yuuvis services authentication, system and tenant-management
   # deployments must be configured to mount the secret
+  # IMPORTANT: if no https is used, you must change the keycloak.http.internalScheme
   createselfsignedcert: true
   fullnameOverride: "keycloak"
   image:
@@ -236,7 +237,8 @@ keycloak:
     # For backwards compatibility reasons we set this to the value used by previous Keycloak versions.
     relativePath: "/auth"
     internalPort: http-internal
-    internalScheme: HTTP
+    # change if no selfsigned cert is used
+    internalScheme: HTTPS
   database:
     vendor: postgres
     hostname: postgresql 
