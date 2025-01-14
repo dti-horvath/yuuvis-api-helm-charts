@@ -393,7 +393,7 @@ yuuvis:
   services:
     api:
       dockerImage: yuuvis/api-gateway
-      tag: 4.21.1
+      tag: 4.21.2
       profiles: prod,redis,kubernetes,metrics
       instances: 1
       pdb:
@@ -441,7 +441,7 @@ yuuvis:
           nginx.ingress.kubernetes.io/proxy-send-timeout: '1800'
           nginx.ingress.kubernetes.io/rewrite-target: "/"
       dockerImage: yuuvis/authentication
-      tag: 4.21.1
+      tag: 4.21.2
       profiles: prod,oauth2,redis,kubernetes,metrics
       instances: 1
       pdb:
@@ -476,7 +476,7 @@ yuuvis:
     index:
       dockerImage: yuuvis/index
       profiles: prod,es,kubernetes,redis,metrics
-      tag: 4.21.1
+      tag: 4.21.2
       instances: 1
       pdb:
         # pdb requires instances > 1 and minAvailable < instances,
@@ -498,7 +498,7 @@ yuuvis:
       podAntiAffinity: {}
     registry:
       dockerImage: yuuvis/registry
-      tag: 4.21.1
+      tag: 4.21.2
       profiles: prod,jpapostgres,dbs,redis,kubernetes,metrics
       instances: 1
       pdb:
@@ -528,7 +528,7 @@ yuuvis:
       podAntiAffinity: {}
     repository:
       dockerImage: yuuvis/repository
-      tag: 4.21.1
+      tag: 4.21.2
       profiles: prod,storage,kubernetes,redis,metrics
       instances: 2
       pdb:
@@ -561,7 +561,7 @@ yuuvis:
       podAntiAffinity: {}
     search:
       dockerImage: yuuvis/search
-      tag: 4.21.1
+      tag: 4.21.2
       profiles: prod,es,redis,kubernetes,metrics
       instances: 1
       pdb:
@@ -589,7 +589,7 @@ yuuvis:
         imagePullPolicy: IfNotPresent
       dockerImage: yuuvis/system
       profiles: prod,native,resourcegit,oauth2,redis,kubernetes,metrics
-      tag: 4.21.1
+      tag: 4.21.2
       instances: 1
       pdb:
         # pdb requires instances > 1 and minAvailable < instances,
@@ -628,7 +628,7 @@ yuuvis:
     commander:
       dockerImage: yuuvis/commander
       profiles: prod,kubernetes,dbs,es
-      tag: 4.21.1
+      tag: 4.21.2
       instances: 0
       java:
         maxHeap: -Xmx512m -XX:+ExitOnOutOfMemoryError
@@ -643,7 +643,7 @@ yuuvis:
     archive:
       deploy: false
       dockerImage: yuuvis/archiveservice
-      tag: 4.21.1
+      tag: 4.21.2
       profiles: prod,storage
       instances: 1
       pdb:
