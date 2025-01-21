@@ -41,6 +41,14 @@ yuuvis:
       podAntiAffinity: {}
       java:
         maxHeap: -Xmx128m
+        cpu:
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       spring:
         datasource:
           hikari:

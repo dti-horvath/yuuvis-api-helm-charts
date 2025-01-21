@@ -68,6 +68,9 @@ spec:
             drop:
             - ALL
           readOnlyRootFilesystem: true
+        {{- if .Values.yuuvis.bpm.engine.resources }}
+        resources: {{- toYaml .Values.yuuvis.bpm.engine.resources | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - mountPath: /tmp
           name: tmp
