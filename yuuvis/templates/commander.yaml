@@ -36,9 +36,9 @@ spec:
       - name: commander
         image: "{{.Values.yuuvis.image.dockerRegistry}}/{{.Values.yuuvis.services.commander.dockerImage}}:{{ .Values.yuuvis.services.commander.tag }}"
         imagePullPolicy: {{ .Values.yuuvis.image.imagePullPolicy }}
-        resources:
-          requests:
-            memory: {{.Values.yuuvis.services.commander.requests.memory}}        
+        {{- if .Values.yuuvis.services.commander.resources }}
+        resources: {{- toYaml .Values.yuuvis.services.commander.resources | nindent 10 }}
+        {{- end }}
         securityContext:
           allowPrivilegeEscalation: true
           capabilities:

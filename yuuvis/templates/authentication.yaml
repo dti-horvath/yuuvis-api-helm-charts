@@ -54,9 +54,9 @@ spec:
           periodSeconds: {{.Values.yuuvis.readinessProbe.periodSeconds }}
           timeoutSeconds: {{.Values.yuuvis.readinessProbe.timeoutSeconds }}
         {{- end}}
-        resources:
-          requests:
-            memory: {{.Values.yuuvis.services.authentication.requests.memory}}
+        {{- if .Values.yuuvis.services.authentication.resources }}
+        resources: {{- toYaml .Values.yuuvis.services.authentication.resources | nindent 10 }}
+        {{- end }}
         securityContext:
           allowPrivilegeEscalation: true
           capabilities:

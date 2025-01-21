@@ -208,7 +208,7 @@ yuuvis:
     #  endSessionUri: https://${keycloak.host}/auth/realms/example/protocol/openid-connect/logout
     #  userNameExtractionPattern: $.sub
     # configuration for the yuuvis organization service
-    keycloak.server: https://keycloak-https.infrastructure/auth
+    keycloak.server: http://keycloak-http.infrastructure/auth
     keycloak.admin.username: {{.Values.yuuvis.initjob.keycloak.admin}}
     keycloak.admin.password: {{.Values.yuuvis.initjob.keycloak.password}}
   systemschema: |
@@ -406,8 +406,13 @@ yuuvis:
       java:
         maxHeap: -Xmx512m -XX:+ExitOnOutOfMemoryError
       port: 7450
-      requests:
-        memory: "512Mi"
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       nodeSelector: {}
       priorityClassName: ""
       tolerations: []
@@ -455,8 +460,13 @@ yuuvis:
       # for the manage endpoints a dedicated port is used
       managePort: 9091
       internalPort: 8081
-      requests:
-        memory: "512Mi"
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       java:
         maxHeap: -Xmx512m -XX:+ExitOnOutOfMemoryError
       volumes: |
@@ -488,8 +498,13 @@ yuuvis:
       port: 7291
       java:
         maxHeap: -Xmx1024m -XX:+ExitOnOutOfMemoryError
-      requests:
-        memory: "1024Mi"
+      resources:
+        requests:
+          memory: "1024Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       nodeSelector: {}
       priorityClassName: ""
       tolerations: []
@@ -511,8 +526,13 @@ yuuvis:
       port: 7510
       java:
         maxHeap: -Xmx1024m -XX:+ExitOnOutOfMemoryError
-      requests:
-        memory: "1024Mi"
+      resources:
+        requests:
+          memory: "1024Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       # service may perform db updates, with possible long duration
       # service uses liquibase, if killed during startup db lock possibly never released
       # as a precaution disable livenessProbe during first of a new version 
@@ -542,8 +562,13 @@ yuuvis:
       maxRequests: 100
       java:
         maxHeap: -Xmx1024m -XX:+ExitOnOutOfMemoryError
-      requests:
-        memory: "1024Mi"
+      resources:
+        requests:
+          memory: "1024Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       # optional: mount certificates at /etc/yuuvis/certs via configmap
       #volumes: |
       #  - name: 
@@ -574,8 +599,13 @@ yuuvis:
       port: 7221
       java:
         maxHeap: -Xmx1024m -XX:+ExitOnOutOfMemoryError
-      requests:
-        memory: "1024Mi"
+      resources:
+        requests:
+          memory: "1024Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       nodeSelector: {}
       priorityClassName: ""
       tolerations: []
@@ -601,8 +631,13 @@ yuuvis:
       port: 7400
       java:
         maxHeap: -Xmx512m -XX:+ExitOnOutOfMemoryError
-      requests:
-        memory: "512Mi"
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       storage:
         request: 100Mi
         class:
@@ -632,8 +667,13 @@ yuuvis:
       instances: 0
       java:
         maxHeap: -Xmx512m -XX:+ExitOnOutOfMemoryError
-      requests:
-        memory: "512Mi"
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       nodeSelector: {}
       priorityClassName: ""
       tolerations: []
@@ -655,8 +695,13 @@ yuuvis:
         minAvailable: 1
       java:
         maxHeap: -Xmx512m -XX:+ExitOnOutOfMemoryError
-      requests:
-        memory: "512Mi"
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       port: 7530
       nodeSelector: {}
       priorityClassName: ""
