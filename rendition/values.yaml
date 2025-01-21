@@ -24,6 +24,13 @@ yuuvis:
     instances: 1
     java:
       maxHeap: -Xmx2048m -XX:+ExitOnOutOfMemoryError
+    resources:
+      requests:
+        memory: "2048Mi"
+        cpu:
+      #limits:
+      #  memory:
+      #  cpu: 
     pdb:
       # pdb requires instances > 1 and minAvailable < instances,
       # otherwise draining nodes will deadlock!
@@ -43,6 +50,13 @@ yuuvis:
     instances: 1
     java:
       options: -Xmx256m -XX:+ExitOnOutOfMemoryError
+    resources:
+      requests:
+        memory: "256Mi"
+      #  cpu:
+      #limits:
+      #  memory:
+      #  cpu: 
     pdb:
       # pdb requires instances > 1 and minAvailable < instances,
       # otherwise draining nodes will deadlock!
@@ -62,6 +76,13 @@ yuuvis:
     profiles: prod
     java:
       options: -Xmx1024m -XX:+ExitOnOutOfMemoryError
+    resources:
+      requests:
+        memory: "1024Mi"
+      #  cpu:
+      #limits:
+      #  memory:
+      #  cpu: 
     yuuvis:
       url: http://authentication-internal
       renditionrepository:

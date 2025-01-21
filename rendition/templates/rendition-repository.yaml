@@ -66,6 +66,9 @@ spec:
           value: {{ .Values.yuuvis.configservice.url }}
         ports:
         - containerPort: 9876
+        {{- if .Values.yuuvis.renditionrepository.resources }}
+        resources: {{- toYaml .Values.yuuvis.renditionrepository.resources | nindent 10 }}
+        {{- end }}
       imagePullSecrets:
       - name: {{.Values.yuuvis.image.imagePullSecret}}
       initContainers:

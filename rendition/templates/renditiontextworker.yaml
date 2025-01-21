@@ -82,7 +82,10 @@ spec:
               key: password
               name: {{.Values.yuuvis.renditiontextworker.yuuvis.user.secretname}}
         ports:
-        - containerPort: 8080 
+        - containerPort: 8080
+        {{- if .Values.yuuvis.renditiontextworker.resources }}
+        resources: {{- toYaml .Values.yuuvis.renditiontextworker.resources | nindent 10 }}
+        {{- end }}
       imagePullSecrets:
       - name: {{.Values.yuuvis.image.imagePullSecret}}
       initContainers:
@@ -123,7 +126,6 @@ spec:
               name: {{.Values.yuuvis.renditiontextworker.yuuvis.user.secretname}}
         image: {{.Values.yuuvis.image.dockerRegistry}}/{{.Values.yuuvis.renditiontextworker.yuuvis.user.createuser.image}}
         imagePullPolicy: IfNotPresent
-        resources: {}
         securityContext:
           allowPrivilegeEscalation: true
           capabilities:
