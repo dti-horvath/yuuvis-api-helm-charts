@@ -67,10 +67,8 @@ spec:
         env:
         - name: "ES_JAVA_OPTS"
           value: {{.Values.elasticsearch.highAvailability.data.memory}}
-        {{- if .Values.elasticsearch.highAvailability.data.requests.memory }}
-        resources:
-          requests:
-            memory: {{.Values.elasticsearch.highAvailability.data.requests.memory}}
+        {{- if .Values.elasticsearch.highAvailability.data.resources }}
+        resources: {{- toYaml .Values.elasticsearch.highAvailability.data.resources | nindent 10 }}
         {{- end }}
         volumeMounts:
         - name: es-data
