@@ -50,6 +50,9 @@ spec:
               drop:
               - ALL
             readOnlyRootFilesystem: true
+          {{- if .Values.yuuvis.client.dashlet.resources }}
+          resources: {{- toYaml .Values.yuuvis.client.dashlet.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
           - mountPath: /tmp
             name: tmp

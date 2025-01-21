@@ -72,6 +72,9 @@ spec:
             drop:
             - ALL
           readOnlyRootFilesystem: true
+        {{- if .Values.yuuvis.client.sothook.resources }}
+        resources: {{- toYaml .Values.yuuvis.client.sothook.resources | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - mountPath: /tmp
           name: tmp

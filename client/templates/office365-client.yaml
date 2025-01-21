@@ -74,6 +74,9 @@ spec:
               drop:
               - ALL
             readOnlyRootFilesystem: true
+          {{- if .Values.yuuvis.client.office365.resources }}
+          resources: {{- toYaml .Values.yuuvis.client.office365.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
           - mountPath: /tmp
             name: tmp

@@ -75,6 +75,9 @@ spec:
         ports:
         - containerPort: 7560
           protocol: TCP
+        {{- if .Values.yuuvis.client.tenantmanagement.resources }}
+        resources: {{- toYaml .Values.yuuvis.client.tenantmanagement.resources | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - mountPath: /tmp
           name: tmp

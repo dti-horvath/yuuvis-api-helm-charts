@@ -16,6 +16,7 @@ spec:
       labels:
         name: architect
     spec:
+      automountServiceAccountToken: false
       {{- if or .Values.yuuvis.client.architect.nodeAffinity .Values.yuuvis.client.architect.podAffinity .Values.yuuvis.client.architect.podAntiAffinity }}
       affinity:
         {{- with .Values.yuuvis.client.architect.nodeAffinity }}
@@ -41,6 +42,9 @@ spec:
             drop:
             - ALL
           readOnlyRootFilesystem: true
+        {{- if .Values.yuuvis.client.architect.resources }}
+        resources: {{- toYaml .Values.yuuvis.client.architect.resources | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - mountPath: /tmp
           name: tmp

@@ -62,6 +62,13 @@ yuuvis:
       podAntiAffinity: {}
       java:
         maxHeap: -Xmx512m
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
     userservice:
       enabled: true
       dockerImage: yuuvis/userservice:1.15.0
@@ -83,6 +90,13 @@ yuuvis:
       podAntiAffinity: {}
       java:
         maxHeap: -Xmx128m
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       database:
         name: erebus
         user: erebus
@@ -112,6 +126,13 @@ yuuvis:
 
         # set `minAvailable: null` if you want to use maxUnavailable instead
         minAvailable: 1
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       nodeSelector: {}
       priorityClassName: ""
       tolerations: []
@@ -129,6 +150,13 @@ yuuvis:
 
         # set `minAvailable: null` if you want to use maxUnavailable instead
         minAvailable: 1
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       nodeSelector: {}
       priorityClassName: ""
       tolerations: []
@@ -139,6 +167,13 @@ yuuvis:
       enabled: true
       dockerImage: yuuvis/architect:2.6.0
       instances: 1
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       nodeSelector: {}
       priorityClassName: ""
       tolerations: []
@@ -165,6 +200,13 @@ yuuvis:
       profiles: prod,cloud,redis,kubernetes
       java:
         maxHeap: -Xmx512m -XX:+ExitOnOutOfMemoryError
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
     tenantmanagement:
       enabled: true
       dockerImage: yuuvis/tenant-management:1.18.0
@@ -185,6 +227,13 @@ yuuvis:
       podAntiAffinity: {}
       java:
         maxHeap: -Xmx128m
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       client:
         rooturl: https://changeme
       # if e.g. the keycloak has been deployed with a self signed cert 
@@ -226,7 +275,14 @@ yuuvis:
       workDir: /tmp
       enableRecovery: "false"
       java:
-        maxHeap: -Xmx128m    
+        maxHeap: -Xmx128m
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
     dashlet:
       enabled: true
       dockerImage: yuuvis/office-for-the-web/yuuvis-momentum-dashlet-microservice:2.0.2
@@ -246,7 +302,14 @@ yuuvis:
       podAntiAffinity: {}
       profiles: prod,docker,kubernetes
       java:
-        maxHeap: -Xmx128m    
+        maxHeap: -Xmx128m
+      resources:
+        requests:
+          memory: "512Mi"
+        #  cpu:
+        #limits:
+        #  memory:
+        #  cpu: 
       configservice:
         url: http://configservice/config  
       
