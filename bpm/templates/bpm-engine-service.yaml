@@ -77,8 +77,19 @@ spec:
       imagePullSecrets:
       - name: {{.Values.yuuvis.image.imagePullSecret}}
       initContainers:
+      - name: init-config-yml
+        image: {{.Values.yuuvis.image.dockerRegistry}}/{{.Values.yuuvis.bpm.engine.initContainerImage}}
+        imagePullPolicy: Always
+        command: ['sh', '/tmp/script/inityml.sh']
+        volumeMounts:
+        - mountPath: /yuuvis/data
+          name: bpmengineresources
+        - mountPath: /tmp/script/inityml.sh
+          name: initbpmenginescript
+          subPath: inityml.sh
       {{- if .Values.yuuvis.bpm.engine.database.createdb }}
-      - command:
+      - name: init-database
+        command:
         - sh
         - /yuuvis/script/initdb.sh
         env:
@@ -106,11 +117,11 @@ spec:
           value: {{.Values.yuuvis.bpm.engine.database.name}}
         image: {{.Values.yuuvis.image.dockerRegistry}}/{{.Values.yuuvis.bpm.engine.initContainerImage}}
         imagePullPolicy: Always
-        name: init-database
         volumeMounts:
         - mountPath: /yuuvis/script/initdb.sh
           name: initscript
           subPath: initdb.sh
+      {{- end }}
       {{- with .Values.yuuvis.bpm.engine.nodeSelector }}
       nodeSelector: {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -130,6 +141,13 @@ spec:
       volumes:
       - emptyDir: {}
         name: tmp
+      - configMap:
+          name: initbpmenginescript
+        name: initbpmenginescript
+      - configMap:
+          name: bpmengineresources
+        name: bpmengineresources
+      {{- if .Values.yuuvis.bpm.engine.database.createdb }}
       - configMap:
           name: initbpmdbconfigmap
         name: initscript

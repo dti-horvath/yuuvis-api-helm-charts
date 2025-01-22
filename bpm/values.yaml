@@ -54,6 +54,23 @@ yuuvis:
           hikari:
             minimumIdle: 10
             maximumPoolSize: 100
+      configyml: |
+        # only one idm provide can be enabled at the same time
+        bpm:
+          engine:
+            idm:
+              keycloak:
+                enabled: true
+                server: 'http://keycloak-http.infrastructure/auth'
+                admin:
+                  username: 'keycloak'
+                  password: 'changeme'
+              # to use a custom identity provider that implements the Custom IDM API
+              custom:
+                enabled: false
+                base-url: 'http://my-custom-idm-provider/api'
+                # for example
+                #base-url: 'http://tenant-management/api/idm'
       database:
         # user and password used by the bpm service to access the desired database
         name: themis
