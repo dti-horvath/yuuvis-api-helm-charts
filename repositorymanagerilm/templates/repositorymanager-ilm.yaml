@@ -39,7 +39,7 @@ spec:
           imagePullPolicy: {{.Values.yuuvis.image.imagePullPolicy}}
           name: repositorymanager-ilm
           ports:
-            - containerPort: 8091
+            - containerPort: 8094
               protocol: TCP
       imagePullSecrets:
         - name: {{.Values.yuuvis.image.imagePullSecret}}

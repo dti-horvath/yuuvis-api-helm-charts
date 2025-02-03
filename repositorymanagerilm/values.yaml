@@ -9,6 +9,7 @@ yuuvis:
     imagePullSecret: yuuvisorg
     dockerRegistry: docker.yuuvis.org/yuuvis
   configserviceUrl: http://system.yuuvis
+  rmalinkUrl: http://repositorymanager-al.yuuvis
   repositorymanagerilm:
     initContainerImage: helper/init-helper:2023-12-03
     profile: prod,kubernetes,yuuvis

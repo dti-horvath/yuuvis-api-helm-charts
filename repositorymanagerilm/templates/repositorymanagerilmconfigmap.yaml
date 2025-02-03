@@ -4,6 +4,7 @@ data:
     repositorymanager-ilm:
       yuuvis:
         api-url: {{.Values.yuuvis.repositorymanagerilm.apiUrl}}
+        rmalink-url: {{.Values.yuuvis.rmalinkUrl}}
 kind: ConfigMap
 metadata:
   name: rmilm
