@@ -72,4 +72,7 @@ spec:
           image: "{{.Values.yuuvis.image.dockerRegistry}}/{{.Values.yuuvis.repositorymanageral.initContainerImage}}"
           imagePullPolicy: IfNotPresent
           command: ["sh", "-c", "{{.Values.initContainer.command}}"]
+        {{- if .Values.initContainer.securityContext }}
+        securityContext:
+        {{- toYaml .Values.initContainer.securityContext | nindent 10 }}
 
